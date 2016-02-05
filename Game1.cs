@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
-
+using System;
 
 namespace MonoGame_PongGame
 {
@@ -25,6 +25,8 @@ namespace MonoGame_PongGame
         int scoreP1 = 0;
         int scoreP2 = 0;
 
+        int ballMulti = 1;
+
         //Player Stuff
         Paddle player;
         Texture2D playerSprite;
@@ -42,7 +44,10 @@ namespace MonoGame_PongGame
         //Audio Stuff
         SoundEffect snd_plop;
         SoundEffect snd_beep;
-        
+
+        //Surprising stuff
+        Random random;
+
         public Game1()
         {
 
@@ -63,6 +68,8 @@ namespace MonoGame_PongGame
 
             MediaPlayer.Volume = 0.25f;
             MediaPlayer.IsRepeating = true;
+
+            random = new Random();
 
             base.Initialize();
         }
@@ -89,7 +96,7 @@ namespace MonoGame_PongGame
             playerSprite = Content.Load<Texture2D>("Sprites\\PaddleSprite");
             player.GameObject(playerSprite, playerSpeed, 5f);
 
-            player2.SetInputType = 2;
+            player2.SetInputType = 3;
             player2Sprite = Content.Load<Texture2D>("Sprites\\PaddleSprite");
             player2.GameObject(player2Sprite, playerSpeed, graphics.GraphicsDevice.Viewport.Width - player2Sprite.Width - 5);
         }
@@ -106,8 +113,8 @@ namespace MonoGame_PongGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            player.Update(gameTime);
-            player2.Update(gameTime);
+            player.Update(gameTime, ball);
+            player2.Update(gameTime, ball);
             ball.Update(gameTime);
             CheckCollision();
 
@@ -118,16 +125,28 @@ namespace MonoGame_PongGame
 
         private void CheckCollision()
         {
+       //     System.Diagnostics.Debug.WriteLine("Ball Value " + ballMulti);
+
             //Check BoundingBox collision
             if (ball.BoundingBox.Intersects(player.BoundingBox))
             {
-                ball.Velocity = ballVelo;
+                //ball.Velocity = ballVelo;
+                ball.SpeedX = ballVelo;
+                ball.SpeedY = random.Next(-50,50);
+                ballMulti++;
+                ball.Multiplicator = ballMulti;
+            //    ball.Bounce = random.Next(0, 100);
                 snd_plop.Play();
             }
 
             if (ball.BoundingBox.Intersects(player2.BoundingBox))
             {
-                ball.Velocity = -ballVelo;
+                //ball.Velocity = -ballVelo;
+                ball.SpeedX = -ballVelo;
+                ball.SpeedY = random.Next(-50, 50);
+                ballMulti++;
+                ball.Multiplicator = ballMulti;
+             //   ball.Bounce = random.Next(0, 100);
                 snd_plop.Play();
             }
 
@@ -139,6 +158,7 @@ namespace MonoGame_PongGame
             {
                 ball.BallReset = true;
                 scoreP2 += 1; //ADD SCORE P2
+                ballMulti = 0;
                 snd_beep.Play();
             }
 
@@ -146,10 +166,10 @@ namespace MonoGame_PongGame
             if (ball.Position2D.X >= ballX)
             {
                 ball.BallReset = true;
-                scoreP1 += 1;//ADD SCORE P1               
+                scoreP1 += 1;//ADD SCORE P1   
+                ballMulti = 0;
                 snd_beep.Play();
             }
-
         }
 
 

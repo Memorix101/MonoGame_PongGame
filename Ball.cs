@@ -13,19 +13,16 @@ namespace MonoGame_PongGame
         Texture2D Texture;
         Vector2 Position;
         float moveSpeed;
+        float bounce;
+        int multiplicator = 1;
+
+        Vector2 spriteSpeed;
 
         bool ballReset = false;
 
-        // Initializing assets and stuff
-        public void GameObject(Texture2D sprite, float speed)
-        {
-
-            Texture = sprite;
-       //     Position = pos;
-            moveSpeed = speed;
-
-            Position = new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - Width, Game1.graphics.GraphicsDevice.Viewport.Height / 2 - Height);
-        }
+        /// <summary>
+        /// Props
+        /// </summary>
 
         public int Width
         {
@@ -51,7 +48,18 @@ namespace MonoGame_PongGame
         
         public Vector2 Position2D
         {
+            set { Position = value;}
             get { return Position; }
+        }
+
+        public float SpeedX
+        {
+            set { spriteSpeed.X = value; }
+        }
+
+        public float SpeedY
+        {
+            set { spriteSpeed.Y = value; }
         }
 
         public float Velocity
@@ -60,10 +68,39 @@ namespace MonoGame_PongGame
             get { return moveSpeed; }
         }
 
+        public float Bounce
+        {
+            set { bounce = value; }
+            get { return bounce; }
+        }
+
         public bool BallReset
         {
             set { ballReset = value; }
             get { return ballReset; }
+        }
+
+        public int Multiplicator
+        {
+            set { multiplicator = value; }
+        }
+
+        /// <summary>
+        /// Stuff
+        /// </summary>
+        /// <param name="gameTime"></param>
+        // Initializing assets and stuff
+
+        public void GameObject(Texture2D sprite, float speed)
+        {
+
+            Texture = sprite;
+            //Position = pos;
+            //moveSpeed = speed;
+            spriteSpeed.X = speed;
+            spriteSpeed.Y = 0f;
+
+            Position = new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - Width, Game1.graphics.GraphicsDevice.Viewport.Height / 2 - Height);
         }
 
         public void Update(GameTime gameTime)
@@ -78,11 +115,47 @@ namespace MonoGame_PongGame
 
             StartPos();
 
-           // ballPos.Y = MathHelper.Clamp(ballPos.Y, 0, Game1.graphics.GraphicsDevice.Viewport.Width * spriteScale);
+            // ballPos.Y = MathHelper.Clamp(ballPos.Y, 0, Game1.graphics.GraphicsDevice.Viewport.Width * spriteScale);
 
-            //Console.WriteLine(Game1.graphics.GraphicsDevice.Viewport.Width + " - " + Height * spriteScale + " - " + ballPos.X);
+            // System.Diagnostics.Debug.WriteLine(Game1.graphics.GraphicsDevice.Viewport.Width + " - " + Height * spriteScale + " - " + ballPos.X);
 
-            Position.X += moveSpeed * (float)t; 
+            //Position.X += moveSpeed * multiplicator *(float)t;
+            //    Position.Y += moveSpeed * multiplicator *(float)t;
+
+
+            // more stuff
+            // Move the sprite by speed, scaled by elapsed time.
+            Position += spriteSpeed * multiplicator * (float)t;
+
+            int MaxX = Game1.graphics.GraphicsDevice.Viewport.Width - Texture.Width;
+            int MinX = 0;
+            int MaxY = Game1.graphics.GraphicsDevice.Viewport.Height - Texture.Height;
+            int MinY = 0;
+
+            // Check for bounce.
+            if (Position.X > MaxX)
+            {
+                spriteSpeed.X *= -1;
+                Position.X = MaxX;
+            }
+
+            else if (Position.X < MinX)
+            {
+                spriteSpeed.X *= -1;
+                Position.X = MinX;
+            }
+
+            if (Position.Y > MaxY)
+            {
+                spriteSpeed.Y *= -1;
+                Position.Y = MaxY;
+            }
+
+            else if (Position.Y < MinY)
+            {
+                spriteSpeed.Y *= -1;
+                Position.Y = MinY;
+            }
 
         }
 
@@ -92,6 +165,7 @@ namespace MonoGame_PongGame
             if (ballReset)
             {
                 Position = new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - Width, Game1.graphics.GraphicsDevice.Viewport.Height / 2 - Height);
+                multiplicator = 1;
                 ballReset = false;
             }
         }

@@ -19,7 +19,8 @@ namespace MonoGame_PongGame
         {
             None,
             WASD,
-            Arrows
+            Arrows,
+            AI
         }
 
      //   float spriteScale = 0.5f;
@@ -62,19 +63,19 @@ namespace MonoGame_PongGame
             set { inputType = value; }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Ball ball)
         {
-            Input(gameTime);
+            Input(gameTime, ball);
         }
 
-        void Input(GameTime gameTime)
+        void Input(GameTime gameTime, Ball ball)
         {
 
             StartPos();
             var t = gameTime.ElapsedGameTime.TotalSeconds;
-            Position.Y = MathHelper.Clamp(Position.Y, 0, Game1.graphics.GraphicsDevice.Viewport.Height  - Height);
+            Position.Y = MathHelper.Clamp(Position.Y, 0, Game1.graphics.GraphicsDevice.Viewport.Height - Height);
 
-            //Console.WriteLine(Game1.graphics.GraphicsDevice.Viewport.Height + " - " + Height * spriteScale + " - " + paddlePos.Y);
+            // System.Diagnostics.Debug.WriteLine(Game1.graphics.GraphicsDevice.Viewport.Height + " - " + Height * spriteScale + " - " + paddlePos.Y);
 
             switch (inputType)
             {
@@ -92,6 +93,10 @@ namespace MonoGame_PongGame
 
                     if (Keyboard.GetState().IsKeyDown(Keys.S))
                         Position.Y += moveSpeed * (float)t;
+                    break;
+
+                case (int)InputType.AI:
+                    Position.Y = ball.Position2D.Y;
                     break;
 
                 default:

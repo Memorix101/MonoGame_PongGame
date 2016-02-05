@@ -117,15 +117,14 @@ namespace MonoGame_PongGame
             player2.Update(gameTime, ball);
             ball.Update(gameTime);
             CheckCollision();
-
-
+            
             base.Update(gameTime);
         }
                 
 
         private void CheckCollision()
         {
-       //     System.Diagnostics.Debug.WriteLine("Ball Value " + ballMulti);
+            //System.Diagnostics.Debug.WriteLine("Ball Value " + ballMulti);
 
             //Check BoundingBox collision
             if (ball.BoundingBox.Intersects(player.BoundingBox))
@@ -135,7 +134,6 @@ namespace MonoGame_PongGame
                 ball.SpeedY = random.Next(-50,50);
                 ballMulti++;
                 ball.Multiplicator = ballMulti;
-            //    ball.Bounce = random.Next(0, 100);
                 snd_plop.Play();
             }
 
@@ -146,7 +144,6 @@ namespace MonoGame_PongGame
                 ball.SpeedY = random.Next(-50, 50);
                 ballMulti++;
                 ball.Multiplicator = ballMulti;
-             //   ball.Bounce = random.Next(0, 100);
                 snd_plop.Play();
             }
 

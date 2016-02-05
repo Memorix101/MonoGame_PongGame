@@ -13,7 +13,6 @@ namespace MonoGame_PongGame
         Texture2D Texture;
         Vector2 Position;
         float moveSpeed;
-        float bounce;
         int multiplicator = 1;
 
         Vector2 spriteSpeed;
@@ -66,12 +65,6 @@ namespace MonoGame_PongGame
         {
             set { moveSpeed = value; }
             get { return moveSpeed; }
-        }
-
-        public float Bounce
-        {
-            set { bounce = value; }
-            get { return bounce; }
         }
 
         public bool BallReset

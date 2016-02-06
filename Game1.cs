@@ -130,8 +130,8 @@ namespace MonoGame_PongGame
             if (ball.BoundingBox.Intersects(player.BoundingBox))
             {
                 //ball.Velocity = ballVelo;
-                ball.SpeedX = ballVelo;
-                ball.SpeedY = random.Next(-50,50);
+                ball.Speedv = new Vector2(ballVelo, ball.Speedv.Y);
+                ball.Speedv = new Vector2(ball.Speedv.X, random.Next(-50, 50));
                 ballMulti++;
                 ball.Multiplicator = ballMulti;
                 snd_plop.Play();
@@ -140,8 +140,8 @@ namespace MonoGame_PongGame
             if (ball.BoundingBox.Intersects(player2.BoundingBox))
             {
                 //ball.Velocity = -ballVelo;
-                ball.SpeedX = -ballVelo;
-                ball.SpeedY = random.Next(-50, 50);
+                ball.Speedv = new Vector2(-ballVelo, ball.Speedv.Y);
+                ball.Speedv = new Vector2(ball.Speedv.X, random.Next(-50, 50));
                 ballMulti++;
                 ball.Multiplicator = ballMulti;
                 snd_plop.Play();

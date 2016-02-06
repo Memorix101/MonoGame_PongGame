@@ -51,16 +51,18 @@ namespace MonoGame_PongGame
             get { return Position; }
         }
 
-        public float SpeedX
+        public Vector2 Speedv
         {
-            set { spriteSpeed.X = value; }
+            get { return spriteSpeed; }
+            set { spriteSpeed = value; }
         }
 
+        /*
         public float SpeedY
         {
             set { spriteSpeed.Y = value; }
         }
-
+        */
         public float Velocity
         {
             set { moveSpeed = value; }
